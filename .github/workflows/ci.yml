@@ -23,7 +23,9 @@ jobs:
         env:
           HOMEBREW_NO_AUTO_UPDATE: "1"
         run: |
-          brew untap bbr88/tap || true
+          if brew tap | grep -qx 'bbr88/tap'; then
+            brew untap bbr88/tap
+          fi
           brew tap bbr88/tap "file://${PWD}"
 
       - name: Ruby syntax check
@@ -47,5 +49,9 @@ jobs:
       - name: Cleanup
         if: always()
         run: |
-          brew uninstall --force bbr88/tap/tabdump || true
-          brew untap bbr88/tap || true
+          if brew list --formula | grep -qx 'tabdump'; then
+            brew uninstall --force tabdump
+          fi
+          if brew tap | grep -qx 'bbr88/tap'; then
+            brew untap bbr88/tap
+          fi
