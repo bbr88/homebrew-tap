@@ -5,8 +5,8 @@ class Tabdump < Formula
 
   # Phase 4 bootstrap formula.
   # Pin url/sha256 to the latest tabdump-homebrew-vX.Y.Z.tar.gz release asset.
-  url "https://github.com/bbr88/tabdump/releases/download/v0.0.4-test/tabdump-homebrew-v0.0.4-test.tar.gz"
-  sha256 "94aca6209143248ff6ee6c93be201f0e5d70a73a48fc0e77e0d6def7e69a1ab2"
+  url "https://github.com/bbr88/tabdump/releases/download/v0.0.5-test/tabdump-homebrew-v0.0.5-test.tar.gz"
+  sha256 "a555f48b614715d23eeaba901211205a836e4701e52fc27903030070a6f3fc23"
 
   depends_on :macos
 
