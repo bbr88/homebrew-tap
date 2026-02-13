@@ -12,40 +12,86 @@ class Tabdump < Formula
   def install
     libexec.install Dir["*"]
 
-    (bin/"tabdump-install").write <<~EOS
+    (bin/"tabdump").write <<~EOS
       #!/usr/bin/env bash
       set -euo pipefail
-      archive="$(find "#{libexec}/dist" -maxdepth 1 -type f -name 'tabdump-app-v*.tar.gz' | head -n 1 || true)"
-      if [[ -z "${archive}" ]]; then
-        echo "[error] prebuilt app archive not found under #{libexec}/dist" >&2
-        exit 1
-      fi
-      exec "#{libexec}/scripts/install.sh" --app-archive "${archive}" "$@"
-    EOS
-    chmod 0755, bin/"tabdump-install"
 
-    (bin/"tabdump-uninstall").write <<~EOS
-      #!/usr/bin/env bash
-      set -euo pipefail
-      exec "#{libexec}/scripts/uninstall.sh" "$@"
+      INSTALL_SCRIPT="#{libexec}/scripts/install.sh"
+      UNINSTALL_SCRIPT="#{libexec}/scripts/uninstall.sh"
+      USER_TABDUMP="${HOME}/.local/bin/tabdump"
+
+      usage() {
+        cat <<'USAGE'
+      Usage:
+        tabdump init [install-options]
+        tabdump uninstall [uninstall-options]
+        tabdump [status|mode|now|permissions|run|open|help] [args...]
+
+      Bootstrap:
+        init        Install TabDump runtime into your user profile.
+        uninstall   Remove TabDump runtime from your user profile.
+
+      After initialization, non-bootstrap subcommands are delegated to:
+        ~/.local/bin/tabdump
+
+      Examples:
+        tabdump init --yes --vault-inbox ~/obsidian/Inbox/
+        tabdump status
+        tabdump now --close
+        tabdump uninstall --yes
+      USAGE
+      }
+
+      find_archive() {
+        find "#{libexec}/dist" -maxdepth 1 -type f -name 'tabdump-app-v*.tar.gz' | head -n 1 || true
+      }
+
+      cmd="${1:-help}"
+
+      case "${cmd}" in
+        init)
+          shift || true
+          archive="$(find_archive)"
+          if [[ -z "${archive}" ]]; then
+            echo "[error] prebuilt app archive not found under #{libexec}/dist" >&2
+            exit 1
+          fi
+          exec "${INSTALL_SCRIPT}" --app-archive "${archive}" "$@"
+          ;;
+        uninstall)
+          shift || true
+          exec "${UNINSTALL_SCRIPT}" "$@"
+          ;;
+        help|-h|--help)
+          usage
+          ;;
+        *)
+          if [[ -x "${USER_TABDUMP}" ]]; then
+            exec "${USER_TABDUMP}" "${cmd}" "$@"
+          fi
+          echo "[error] TabDump is not initialized yet." >&2
+          echo "[hint] Run: tabdump init --yes --vault-inbox ~/obsidian/Inbox/" >&2
+          exit 1
+          ;;
+      esac
     EOS
-    chmod 0755, bin/"tabdump-uninstall"
+    chmod 0755, bin/"tabdump"
   end
 
   def caveats
     <<~EOS
       Bootstrap formula only. Replace url/sha256 with the latest release package.
 
-      Install TabDump runtime into your user profile:
-        tabdump-install --yes --vault-inbox ~/obsidian/Inbox/
+      Initialize TabDump runtime in your user profile:
+        tabdump init --yes --vault-inbox ~/obsidian/Inbox/
 
       Uninstall runtime:
-        tabdump-uninstall --yes
+        tabdump uninstall --yes
     EOS
   end
 
   test do
-    assert_match "Usage:", shell_output("#{bin}/tabdump-install --help")
-    assert_match "Usage:", shell_output("#{bin}/tabdump-uninstall --help")
+    assert_match "tabdump init", shell_output("#{bin}/tabdump --help")
+    assert_match "not initialized", shell_output("#{bin}/tabdump status 2>&1", 1)
   end
 end

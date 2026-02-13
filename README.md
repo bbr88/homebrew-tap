@@ -2,6 +2,29 @@
 
 Homebrew tap for TabDump.
 
+## Install and Bootstrap
+
+```bash
+brew tap bbr88/tap
+brew install tabdump
+tabdump init --yes --vault-inbox ~/obsidian/Inbox/
+```
+
+After initialization:
+
+```bash
+tabdump status
+tabdump now
+tabdump mode auto
+```
+
+Uninstall runtime:
+
+```bash
+tabdump uninstall --yes
+brew uninstall tabdump
+```
+
 ## Formula Bump Helper
 
 Use the helper script to update `Formula/tabdump.rb` from a release tag.
