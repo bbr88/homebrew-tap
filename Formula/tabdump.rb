@@ -80,7 +80,8 @@ class Tabdump < Formula
 
   def caveats
     <<~EOS
-      Bootstrap formula only. Replace url/sha256 with the latest release package.
+      Formula is pinned to a specific signed release artifact.
+      Upgrade to newer versions with: brew update && brew upgrade tabdump
 
       Initialize TabDump runtime in your user profile:
         tabdump init --yes --vault-inbox ~/obsidian/Inbox/
