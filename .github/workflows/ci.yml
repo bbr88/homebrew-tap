@@ -1,0 +1,51 @@
+name: tap-ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tap-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  formula:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Tap local repository
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: "1"
+        run: |
+          brew untap bbr88/tap || true
+          brew tap bbr88/tap "file://${PWD}"
+
+      - name: Ruby syntax check
+        run: ruby -c Formula/tabdump.rb
+
+      - name: Brew audit
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: "1"
+        run: brew audit --strict bbr88/tap/tabdump
+
+      - name: Install formula
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: "1"
+        run: brew install bbr88/tap/tabdump
+
+      - name: Run formula test
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: "1"
+        run: brew test bbr88/tap/tabdump
+
+      - name: Cleanup
+        if: always()
+        run: |
+          brew uninstall --force bbr88/tap/tabdump || true
+          brew untap bbr88/tap || true
