@@ -83,8 +83,8 @@ class Tabdump < Formula
       Formula is pinned to a specific signed release artifact.
       Upgrade to newer versions with: brew update && brew upgrade tabdump
 
-      Initialize TabDump runtime in your user profile:
-        tabdump init --yes --vault-inbox ~/obsidian/Inbox --enable-llm true --key-mode keychain
+      Initialise TabDump runtime in your user profile:
+        tabdump init --vault-inbox ~/obsidian/Inbox --enable-llm true --key-mode keychain
 
       Uninstall runtime:
         tabdump uninstall --yes
