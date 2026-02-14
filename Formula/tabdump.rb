@@ -84,7 +84,7 @@ class Tabdump < Formula
       Upgrade to newer versions with: brew update && brew upgrade tabdump
 
       Initialize TabDump runtime in your user profile:
-        tabdump init --yes --vault-inbox ~/obsidian/Inbox/
+        tabdump init --yes --vault-inbox ~/obsidian/Inbox --enable-llm true --key-mode keychain
 
       Uninstall runtime:
         tabdump uninstall --yes
