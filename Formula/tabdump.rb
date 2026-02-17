@@ -3,8 +3,8 @@ class Tabdump < Formula
   homepage "https://github.com/bbr88/tabdump"
 
   # Pin url/sha256 to the latest tabdump-homebrew-vX.Y.Z.tar.gz release asset.
-  url "https://github.com/bbr88/tabdump/releases/download/v0.0.8/tabdump-homebrew-v0.0.8.tar.gz"
-  sha256 "0340992dba2115bf1cc5ed97faeaf7a881d7ce51af56fb301b30c12505f2c96a"
+  url "https://github.com/bbr88/tabdump/releases/download/v0.1.0/tabdump-homebrew-v0.1.0.tar.gz"
+  sha256 "f53c1ae8dac990c31b86ea8cf82dac627a580a7c5acfc96049a30106219bf1db"
   license "MIT"
 
   depends_on :macos
@@ -25,7 +25,7 @@ class Tabdump < Formula
       Usage:
         tabdump init [install-options]
         tabdump uninstall [uninstall-options]
-        tabdump [status|mode|now|permissions|run|open|help] [args...]
+        tabdump [status|mode|config|count|now|permissions|run|open|help] [args...]
 
       Bootstrap:
         init        Install TabDump runtime into your user profile.
@@ -43,7 +43,11 @@ class Tabdump < Formula
       }
 
       find_archive() {
-        find "#{libexec}/dist" -maxdepth 1 -type f -name 'tabdump-app-v*.tar.gz' | head -n 1 || true
+        if [[ -f "#{libexec}/dist/tabdump-app.tar.gz" ]]; then
+          echo "#{libexec}/dist/tabdump-app.tar.gz"
+          return
+        fi
+        find "#{libexec}/dist" -maxdepth 1 -type f -name 'tabdump-app-v*.tar.gz' | LC_ALL=C sort | tail -n 1 || true
       }
 
       cmd="${1:-help}"
@@ -93,6 +97,7 @@ class Tabdump < Formula
 
   test do
     assert_match "tabdump init", shell_output("#{bin}/tabdump --help")
+    assert_match "tabdump [status|mode|config|count|now|permissions|run|open|help]", shell_output("#{bin}/tabdump --help")
     assert_match "not initialized", shell_output("#{bin}/tabdump status 2>&1", 1)
   end
 end
