@@ -25,7 +25,7 @@ class Tabdump < Formula
       Usage:
         tabdump init [install-options]
         tabdump uninstall [uninstall-options]
-        tabdump [status|mode|config|count|now|permissions|run|open|help] [args...]
+        tabdump [status|logs|mode|config|count|now|permissions|run|open|help] [args...]
 
       Bootstrap:
         init        Install TabDump runtime into your user profile.
@@ -87,8 +87,24 @@ class Tabdump < Formula
       Formula is pinned to a specific signed release artifact.
       Upgrade to newer versions with: brew update && brew upgrade tabdump
 
-      Initialise TabDump runtime in your user profile:
-        tabdump init --vault-inbox ~/obsidian/Inbox --enable-llm true --key-mode keychain
+      Initialize TabDump runtime in your user profile (LLM-enabled default):
+        tabdump init --yes --vault-inbox ~/obsidian/Inbox --enable-llm true --key-mode keychain
+
+      Optional no-LLM initialization:
+        tabdump init --yes --vault-inbox ~/obsidian/Inbox
+
+      Runtime paths (fixed contract):
+        App: ~/Applications/TabDump.app
+        App Support: ~/Library/Application Support/TabDump/
+        Launch agent: ~/Library/LaunchAgents/io.orc-visioner.tabdump.monitor.plist
+
+      Logs:
+        tabdump logs
+        Files: ~/Library/Application Support/TabDump/logs/monitor.out.log
+               ~/Library/Application Support/TabDump/logs/monitor.err.log
+
+      Is it running?
+        tabdump status
 
       Uninstall runtime:
         tabdump uninstall --yes
@@ -99,7 +115,7 @@ class Tabdump < Formula
     help_output = shell_output("#{bin}/tabdump --help")
 
     assert_match "tabdump init", help_output
-    assert_match "tabdump [status|mode|config|count|now|permissions|run|open|help]",
+    assert_match "tabdump [status|logs|mode|config|count|now|permissions|run|open|help]",
                  help_output
     assert_match "not initialized", shell_output("#{bin}/tabdump status 2>&1", 1)
   end

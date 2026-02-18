@@ -7,7 +7,7 @@ Homebrew tap for TabDump.
 ```bash
 brew tap bbr88/tap
 brew install tabdump
-tabdump init --yes --vault-inbox ~/obsidian/Inbox/
+tabdump init --vault-inbox ~/obsidian/Inbox --enable-llm true --key-mode keychain
 ```
 
 After initialization:
