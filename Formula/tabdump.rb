@@ -96,8 +96,11 @@ class Tabdump < Formula
   end
 
   test do
-    assert_match "tabdump init", shell_output("#{bin}/tabdump --help")
-    assert_match "tabdump [status|mode|config|count|now|permissions|run|open|help]", shell_output("#{bin}/tabdump --help")
+    help_output = shell_output("#{bin}/tabdump --help")
+
+    assert_match "tabdump init", help_output
+    assert_match "tabdump [status|mode|config|count|now|permissions|run|open|help]",
+                 help_output
     assert_match "not initialized", shell_output("#{bin}/tabdump status 2>&1", 1)
   end
 end
