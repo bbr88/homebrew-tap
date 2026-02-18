@@ -3,8 +3,8 @@ class Tabdump < Formula
   homepage "https://github.com/bbr88/tabdump"
 
   # Pin url/sha256 to the latest tabdump-homebrew-vX.Y.Z.tar.gz release asset.
-  url "https://github.com/bbr88/tabdump/releases/download/v0.1.0/tabdump-homebrew-v0.1.0.tar.gz"
-  sha256 "f53c1ae8dac990c31b86ea8cf82dac627a580a7c5acfc96049a30106219bf1db"
+  url "https://github.com/bbr88/tabdump/releases/download/v0.1.1/tabdump-homebrew-v0.1.1.tar.gz"
+  sha256 "8418bd55f954b103a9648a2d0a4476720982959daac225efac953e10cde89a36"
   license "MIT"
 
   depends_on :macos
