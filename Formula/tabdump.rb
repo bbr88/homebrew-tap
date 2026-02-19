@@ -25,6 +25,7 @@ class Tabdump < Formula
       Usage:
         tabdump init [install-options]
         tabdump uninstall [uninstall-options]
+        tabdump [--version|-v|version]
         tabdump [status|logs|mode|config|count|now|permissions|run|open|help] [args...]
 
       Bootstrap:
@@ -65,6 +66,12 @@ class Tabdump < Formula
         uninstall)
           shift || true
           exec "${UNINSTALL_SCRIPT}" "$@"
+          ;;
+        version|-v|--version)
+          if [[ -x "${USER_TABDUMP}" ]]; then
+            exec "${USER_TABDUMP}" --version
+          fi
+          echo "tabdump bootstrap #{version}"
           ;;
         help|-h|--help)
           usage
@@ -115,8 +122,10 @@ class Tabdump < Formula
     help_output = shell_output("#{bin}/tabdump --help")
 
     assert_match "tabdump init", help_output
+    assert_match "tabdump [--version|-v|version]", help_output
     assert_match "tabdump [status|logs|mode|config|count|now|permissions|run|open|help]",
                  help_output
+    assert_match "tabdump bootstrap", shell_output("#{bin}/tabdump --version")
     assert_match "not initialized", shell_output("#{bin}/tabdump status 2>&1", 1)
   end
 end
