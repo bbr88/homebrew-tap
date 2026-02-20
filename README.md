@@ -7,16 +7,23 @@ Homebrew tap for TabDump.
 ```bash
 brew tap bbr88/tap
 brew install tabdump
-tabdump init --vault-inbox ~/obsidian/Inbox --enable-llm true --key-mode keychain
+tabdump init --yes --vault-inbox ~/obsidian/Inbox --enable-llm true --key-mode keychain
 ```
 
 After initialization:
 
 ```bash
 tabdump status
-tabdump now
+tabdump permissions
+tabdump now --json
+tabdump logs --lines 80
 tabdump mode auto
 ```
+
+Notes:
+- `tabdump count` is fail-hard: it returns `count_unavailable` when fresh tab-count evidence cannot be confirmed.
+- `tabdump logs` reads `~/Library/Application Support/TabDump/logs/monitor.out.log` (combined stdout/stderr).
+- `tabdump permissions` uses a lightweight probe (raw dump check only; skips clean-note postprocess).
 
 Uninstall runtime:
 

@@ -107,8 +107,12 @@ class Tabdump < Formula
 
       Logs:
         tabdump logs
-        Files: ~/Library/Application Support/TabDump/logs/monitor.out.log
-               ~/Library/Application Support/TabDump/logs/monitor.err.log
+        File: ~/Library/Application Support/TabDump/logs/monitor.out.log (combined stdout/stderr)
+        Launch-agent monitor runs in verbose mode by default.
+
+      Lightweight permissions probe:
+        tabdump permissions
+        Returns after raw-dump permission signal (skips clean-note postprocess).
 
       Is it running?
         tabdump status
